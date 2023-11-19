@@ -9,15 +9,15 @@ using UnityEngine;
 /// To use, attach to a gameobject and use the GUI to load a URDF.
 ///
 /// Notes:
-/// 
+///
 /// - This component is for demonstration and testing only
 ///   and is not intended to be used as is in a final product.
-/// 
+///
 /// - The runtime import feature is currently only functional in builds created using
 ///   Mono scripting backend and will not fully work in standalone builds created with
 ///   IL2CPP due to the dependency to Assimpnet plugin for loading collada meshes.
 ///   However URDF files that only use STL format for both visual and collision meshes
-///   can still be imported in runtime in standalone IL2CPP builds.  
+///   can still be imported in runtime in standalone IL2CPP builds.
 /// </summary>
 public class RuntimeUrdfImporterExample : MonoBehaviour
 {
@@ -32,8 +32,8 @@ public class RuntimeUrdfImporterExample : MonoBehaviour
     private float controllerStiffness = 10000;
     private float controllerDamping = 100;
     private float controllerForceLimit = 1000;
-    private float controllerSpeed = 30;
-    private float controllerAcceleration = 10;
+    // private float controllerSpeed = 30;
+    // private float controllerAcceleration = 10;
     private GameObject currentRobot = null;
     private bool isLoading = false;
 
@@ -61,7 +61,7 @@ public class RuntimeUrdfImporterExample : MonoBehaviour
         };
 
         GameObject robotObject = null;
-        if (showProgress) 
+        if (showProgress)
         {
             IEnumerator<GameObject> createRobot = UrdfRobotExtensions.Create(urdfFilepath, settings, showProgress, true);
             yield return createRobot;
@@ -72,7 +72,7 @@ public class RuntimeUrdfImporterExample : MonoBehaviour
             robotObject = UrdfRobotExtensions.CreateRuntime(urdfFilepath, settings);
         }
 
-        if (robotObject != null && robotObject.transform != null) 
+        if (robotObject != null && robotObject.transform != null)
         {
             robotObject.transform.SetParent(transform);
             SetControllerParameters(robotObject);
@@ -84,10 +84,10 @@ public class RuntimeUrdfImporterExample : MonoBehaviour
 
     void SetControllerParameters(GameObject robot)
     {
-        if (setImmovableLink) 
+        if (setImmovableLink)
         {
             Transform baseNode = robot.transform.FirstChildByQuery(x => x.name == immovableLinkName);
-            if (baseNode && baseNode.TryGetComponent<ArticulationBody>(out ArticulationBody baseNodeAB)) 
+            if (baseNode && baseNode.TryGetComponent<ArticulationBody>(out ArticulationBody baseNodeAB))
             {
                 baseNodeAB.immovable = true;
             }
@@ -98,8 +98,8 @@ public class RuntimeUrdfImporterExample : MonoBehaviour
             controller.stiffness = controllerStiffness;
             controller.damping = controllerDamping;
             controller.forceLimit = controllerForceLimit;
-            controller.speed = controllerSpeed;
-            controller.acceleration = controllerAcceleration;
+            // controller.speed = controllerSpeed;
+            // controller.acceleration = controllerAcceleration;
             controller.enabled = true;
         }
     }
@@ -119,5 +119,5 @@ public class RuntimeUrdfImporterExample : MonoBehaviour
         {
             StartCoroutine(LoadUrdf());
         }
-    }    
+    }
 }
