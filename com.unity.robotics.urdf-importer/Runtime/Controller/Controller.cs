@@ -4,6 +4,7 @@ using System.Linq;
 using Unity.Robotics;
 using UnityEngine;
 
+
 namespace Unity.Robotics.UrdfImporter.Control
 {
     public enum ControlType { PositionControl };
@@ -42,27 +43,22 @@ namespace Unity.Robotics.UrdfImporter.Control
         {
             this.gameObject.AddComponent<FKRobot>();
             articulationChain = this.GetComponentsInChildren<ArticulationBody>();
+            List<JointControl> jointList = new List<JointControl>();
             foreach (ArticulationBody joint in articulationChain)
             {
-                joint.gameObject.AddComponent<JointControl>();
+                JointControl joint_control = joint.gameObject.AddComponent<JointControl>();
+                joint_control.joint = joint;
+                joint_control.controltype = control;
+
+                // joint_control.
                 joint.jointFriction = 0;  // 摩擦力
                 joint.angularDamping = 0;  // 阻尼
                 ArticulationDrive currentDrive = joint.xDrive;
                 currentDrive.forceLimit = forceLimit;
                 joint.xDrive = currentDrive;
-            }
 
-            Invoke("OneTimeAction", 0.1f); // 0.1秒后执行
-        }
-
-        void OneTimeAction()
-        {
-            List<JointControl> jointList = new List<JointControl>();
-            foreach (ArticulationBody joint in articulationChain)
-            {
-                var jointControl = joint.gameObject.GetComponent<JointControl>();
-                jointList.Add(jointControl);
-                UpdateControlType(jointControl);
+                jointList.Add(joint_control);
+                UpdateControlType(joint_control);
             }
             jointControlList = jointList
                                .Where(joint => jointName.Contains(joint.name)) // 过滤掉不存在于 referenceList 中的元素

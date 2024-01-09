@@ -5,17 +5,13 @@ using Unity.Robotics.UrdfImporter;
 
 public class JointControl : MonoBehaviour
 {
-    Unity.Robotics.UrdfImporter.Control.Controller controller;
-
     public Unity.Robotics.UrdfImporter.Control.ControlType controltype;
     public float target ;
     public ArticulationBody joint;
 
     void Start()
     {
-        controller = (Unity.Robotics.UrdfImporter.Control.Controller)this.GetComponentInParent(typeof(Unity.Robotics.UrdfImporter.Control.Controller));
         joint = this.GetComponent<ArticulationBody>();
-        controller.UpdateControlType(this);
     }
 
     void FixedUpdate(){
