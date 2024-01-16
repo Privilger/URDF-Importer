@@ -43,6 +43,7 @@ public class JointControl : MonoBehaviour
                         currentDrive.target += target;
                     }
                 }
+                currentDrive.targetVelocity = 0f;
                 joint.xDrive = currentDrive;
             }
         }
